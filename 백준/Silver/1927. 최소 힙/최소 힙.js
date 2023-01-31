@@ -1,68 +1,53 @@
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let [n, ...arr] = require('fs').readFileSync(filePath).toString().trim().split("\n").map(i=>+i);
+
 class minHeap {
   constructor() {
-    this.heap = [];
-    this.heap.push(-Infinity); 
+    this.nodes = [];
   }
-  insert(val) {
-    this.heap.push(val); 
-    this.upheap(this.heap.length - 1); 
+  insert(data) {
+    this.nodes.push(data); 
+    this.bubbleUp(); 
   }
-  upheap(pos) {
-    let tmp = this.heap[pos]; 
-    while (tmp < this.heap[parseInt(pos / 2)]) {
-      this.heap[pos] = this.heap[parseInt(pos / 2)]; 
-      pos = parseInt(pos / 2);
+  extract() {
+    const min = this.nodes[0]
+    if (this.nodes.length === 1) {
+        this.nodes.pop()
+        return min
     }
-    this.heap[pos] = tmp; 
+    this.nodes[0] = this.nodes.pop()
+    this.bubbleDown()
+    return min
   }
-  get() {
-    if (this.heap.length === 2) return this.heap.pop();
-    let res = this.heap[1];
-    this.heap[1] = this.heap.pop();
-    this.downheap(1, this.heap.length - 1);
-    return res; 
-  }
-  downheap(pos, len) {
-    let tmp = this.heap[pos],
-      child;
-    while (pos <= parseInt(len / 2)) {
-      child = pos * 2;
-      if (child < len && this.heap[child] > this.heap[child + 1]) child++;
-      if (tmp <= this.heap[child]) break;
-      this.heap[pos] = this.heap[child]; 
-      pos = child;
+  bubbleUp(index = this.nodes.length - 1) {
+    let tmp = this.nodes[index]; 
+    while (tmp < this.nodes[Math.floor((index-1) / 2)]) { //부모가 나보다 작을때까지
+      this.nodes[index] = this.nodes[Math.floor((index-1) / 2)]; //부모를 내 자리로 끌어내려
+      index = Math.floor((index-1) / 2); //내 인덱스를 부모 인덱스로 바꿔
     }
-    this.heap[pos] = tmp;
+    this.nodes[index] = tmp;  //내자리가 될 부모인덱스에 나 넣음
   }
-  size() {
-    return this.heap.length - 1;
-  }
-  front() {
-    return this.heap[1];
+  bubbleDown(index = 0, length = this.nodes.length) {
+    let tmp = this.nodes[index], child; //제일 아래있던(큰) 수가 루트에 올라온 상황
+    while (index < Math.floor(length / 2)) { //??????
+      child = index * 2 + 1; //왼쪽 자식
+      if (child < length && this.nodes[child] > this.nodes[child + 1]) child++; //왼쪽 자식값이 오른쪽 자식값보다 크면, 오른쪽 선택 (값이 더 작은애를 (나랑 비교한 뒤) 부모로 올려야 하니까)
+      if (tmp <= this.nodes[child]) break; //선택한 왼쪽 or 오른쪽 자식값이, 현재 노드값보다 크면 그만 (자기가 더 작으므로 위에 위치하는게 맞음)
+      this.nodes[index] = this.nodes[child]; // 작으면 자식값이랑 바꾸기 (자식 올리고 자기가 내려가기)
+      index = child; // 바뀐 내 자리에서 부모랑 체크해야하므로
+    }
+    this.nodes[index] = tmp;
   }
 }
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
-let input = fs.readFileSync(filePath).toString().trim().split("\n");
-let n = Number(input[0]); // 연산의 개수
-let index = 1;
-let minQueue = new minHeap();
-let result = "";
-while (index <= n) {
-  if (Number(input[index]) === 0) {
-    // 가장 작은 값 출력하고 제거
-    if (minQueue.size() === 0) {
-      // console.log(0);
-      result += `0\n`;
+
+const heap = new minHeap()
+let answer = [];
+arr.forEach((item) => {
+    if (item !== 0) {
+        heap.insert(item);
     } else {
-      //   console.log(minQueue.front());
-      result += `${minQueue.front()}\n`;
-      minQueue.get();
+      heap.nodes.length === 0 ? answer.push(0) : answer.push(heap.extract());
     }
-  } else {
-    // input[index]값 배열에 넣기
-    minQueue.insert(Number(input[index]));
-  }
-  index++;
-}
-console.log(result.trim());
+})
+
+console.log(answer.join('\n'));
