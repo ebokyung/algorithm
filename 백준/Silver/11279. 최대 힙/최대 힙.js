@@ -1,47 +1,40 @@
 let fs = require('fs');
-var input = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
-let n = +input[0]
-let operations = []
-for (let i = 1; i < input.length; i++) {
-    operations.push(+input[i])
-}
+let [n, ...arr] = fs.readFileSync('/dev/stdin').toString().trim().split('\n').map(i=>+i);
 
 class maxHeap {
     constructor() {
-        this.nodes = []
+        this.nodes = [];
     }
 
     insert(data) {
-        this.nodes.push(data)
-        this.bubbleUp()
+        this.nodes.push(data);
+        this.bubbleUp();
+    }
+    extract() {
+        const max = this.nodes[0];
+        if (this.nodes.length === 1) {
+            this.nodes.pop();
+            return max;
+        }
+        this.nodes[0] = this.nodes.pop();
+        this.bubbleDown();
+        return max;
     }
 
     bubbleUp(index = this.nodes.length - 1) {
-        if (index < 1) return
+        if (index < 1) return;
         let currentNode = this.nodes[index]
         let parentIndex = Math.floor((index - 1) / 2)
         let parentNode = this.nodes[parentIndex]
 
-        if (parentNode >= currentNode) return
+        if (parentNode >= currentNode) return;
 
         this.nodes[parentIndex] = currentNode
         this.nodes[index] = parentNode
         index = parentIndex
         this.bubbleUp(index)
     }
-
-    extract() {
-        const max = this.nodes[0]
-        if (this.nodes.length === 1) {
-            this.nodes.pop()
-            return max
-        }
-        this.nodes[0] = this.nodes.pop()
-        this.trickleDown()
-        return max
-    }
-
-    trickleDown(index = 0) {
+    bubbleDown(index = 0) {
         let leftChildIndex = index * 2 + 1
         let rightChildIndex = index * 2 + 2
         let length = this.nodes.length
@@ -69,23 +62,19 @@ class maxHeap {
             let t = this.nodes[maximum]
             this.nodes[maximum] = this.nodes[index]
             this.nodes[index] = t
-            this.trickleDown(maximum)
+            this.bubbleDown(maximum)
         }
     }
 }
+
 const heap = new maxHeap()
-let extracts = ''
-operations.forEach((operation, index) => {
-    if (operation !== 0) {
-        heap.insert(operation)
+let answer = [];
+arr.forEach((item, index) => {
+    if (item !== 0) {
+        heap.insert(item);
     } else {
-        if (heap.nodes.length === 0) {
-            extracts += "0" + "\n"
-        } else {
-            let t = heap.extract()
-            extracts += t + "\n"
-        }
+        heap.nodes.length === 0 ? answer.push(0) : answer.push(heap.extract());
     }
 })
 
-console.log(extracts.trim())
+console.log(answer.join('\n'));
