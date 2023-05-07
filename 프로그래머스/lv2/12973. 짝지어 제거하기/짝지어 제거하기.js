@@ -7,7 +7,6 @@ function solution(s) {
         } else {
             stack.push(s[i])
         }
-        // console.log(i + ' : ' + stack);   
     }
-    return stack.length > 0 ? 0 : 1;
+    return stack.length ? 0 : 1;
 }
