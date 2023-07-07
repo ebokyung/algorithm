@@ -1,9 +1,5 @@
 function solution(s) {
-    var answer = '';
+    let arr = s.split(' ')
     
-    const sorted = s.split(' ').map(i=>i*1).sort((a,b)=>(a-b))
-    answer += sorted[0] + ' '
-    answer += sorted[sorted.length - 1]
-    
-    return answer;
+    return Math.min(...arr) + ' ' + Math.max(...arr);
 }
