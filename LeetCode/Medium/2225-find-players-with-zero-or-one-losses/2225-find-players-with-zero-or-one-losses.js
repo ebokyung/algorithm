@@ -3,22 +3,18 @@
  * @return {number[][]}
  */
 var findWinners = function(matches) {
-    const rankTable = {};
-    matches.forEach((match) => {
-        const winner = match[0];
-        const loser = match[1];
-        rankTable[winner] = { ...rankTable[winner] }
-        rankTable[loser] = { ...rankTable[loser]}
-        rankTable[winner]["won"] = ~~rankTable[winner]["won"] + 1;
-        rankTable[loser]["lost"] = ~~rankTable[loser]["lost"] + 1;
-    });
+    const lossCnt = new Array(100001).fill(0);
+    for(let [winner, loser] of matches) {
+        lossCnt[winner] = lossCnt[winner] === 0 ? -1 : lossCnt[winner]
+        lossCnt[loser] = lossCnt[loser] === -1 ? 1 : lossCnt[loser]+1;
+    };
 
-    const firstPlace = [];
-    const secondPlace = [];
-    Object.entries(rankTable).forEach(([player, rank]) =>  {
-        if(rank.won > 0 && !rank.lost) firstPlace.push(player);
-        else if(rank.lost === 1) secondPlace.push(player);
+    const zeroLoss = [];
+    const oneLoss = [];
+    lossCnt.forEach((player, index) =>  {
+        if(player === -1) zeroLoss.push(index);
+        else if(player === 1) oneLoss.push(index);
     })
 
-    return [firstPlace, secondPlace]
+    return [zeroLoss, oneLoss]
 };
