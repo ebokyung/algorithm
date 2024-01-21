@@ -3,17 +3,18 @@
  * @return {number}
  */
 var rob = function(nums) {
-    const table = new Array(nums.length + 2);
-    
-    table[nums.length + 0] = 0;
-    table[nums.length + 1] = 0;
+    let robbedIdxPlus1 = 0;
+    let robbedIdxPlus2 = 0;
     
     for (let i = nums.length - 1; i >= 0; i--) {
-        const sumIfSkipped = table[i + 1];
-        const sumIfRobbed = nums[i] + table[i + 2];
+        const sumIfSkipped = robbedIdxPlus1;
+        const sumIfRobbed = nums[i] + robbedIdxPlus2;
         
-        table[i] = Math.max(sumIfSkipped, sumIfRobbed);
+        const maxRobbedAtIdx = Math.max(sumIfSkipped, sumIfRobbed);
+        
+        robbedIdxPlus2 = robbedIdxPlus1;
+        robbedIdxPlus1 = maxRobbedAtIdx;
     }
     
-    return table[0];
+    return robbedIdxPlus1;
 };
