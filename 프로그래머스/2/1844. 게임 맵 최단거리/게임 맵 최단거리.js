@@ -1,30 +1,20 @@
 function solution(maps) {
-    const yLength = maps.length;
-    const xLength = maps[0].length;
-    const goalY = yLength - 1;
-    const goalX = xLength - 1;
+    const n = maps.length; // row
+    const m = maps[0].length; // col
+    const queue = [{coord:[0,0], count:0}];
 
-    // y, x, steps
-    const queue = [];
-    queue.push([0, 0, 1]);
+    while(queue.length){
+        const {coord: [curRow, curCol], count} = queue.shift();
+        if(curRow === -1 || curRow >= n || curCol === -1 || curCol >= m) continue;
+        if(curRow == n-1 && curCol == m-1) return count + 1;
+        if(maps[curRow][curCol] === 0) continue;
+        maps[curRow][curCol] = 0;
 
-    while (queue.length) {
-        const [y, x, steps] = queue.shift();
-
-        if (x < 0 || x >= xLength) continue;
-        if (y < 0 || y >= yLength) continue;
-        if (maps[y][x] === 0) continue;
-
-        if (y === goalY && x === goalX) {
-            return steps;
+        const direction = [[curRow-1, curCol], [curRow+1, curCol],[curRow, curCol-1],[curRow, curCol+1]];
+        for(let i of direction){
+            queue.push({coord: i, count: count+1});
         }
-
-        maps[y][x] = 0;
-        queue.push([y + 1, x, steps + 1])
-        queue.push([y - 1, x, steps + 1])
-        queue.push([y, x + 1, steps + 1])
-        queue.push([y, x - 1, steps + 1])
     }
-
-    return -1
+    return -1;
 }
+
