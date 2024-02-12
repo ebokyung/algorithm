@@ -7,10 +7,10 @@ function solution(n, lost, reserve) {
     
     const finalLost = noReserveLost.filter((lost) => {
         // 첫번째로 체육복을 빌려줄 수 있는 사람 
-        const lend = hasReserve.find((reserve) => Math.abs(reserve - lost) == 1);
+        const lend = hasReserve.find((reserve) => Math.abs(+reserve - lost) == 1);
         
         // 체육복 빌려줄 사람이 없으면 그대로 lost 리턴
-        if(!lend) return lost;
+        if(!lend) return true;
         
         // 빌려준 사람 제외하기
         hasReserve = hasReserve.filter((reverse) => reverse !== lend);
@@ -20,18 +20,7 @@ function solution(n, lost, reserve) {
     return n - finalLost.length;
 }
 
-console.log(solution(5, [2,4], [2,3,5]))
-// lostWithoutExtra: [ 4 ]
-// hasGymSuit: 	[ 1, 1, 1, 0, 1 ]
-
-console.log(solution(5, [2,4], [2,4])) 
-// lostWithoutExtra: []
-// hasGymSuit: 	[ 1, 1, 1, 1, 1 ]
-
-console.log(solution(5, [1,4], [2,3])) 
-// lostWithoutExtra: [ 1, 4 ]
-// hasGymSuit: 	[ 0, 1, 1, 0, 1 ]
-
-console.log(solution(5, [4,2], [3,5])) 
-// lostWithoutExtra: [ 4, 2 ] -> [ 2, 4 ]
-// hasGymSuit: 	[ 1, 0, 1, 0, 1 ]
+// console.log(solution(5, [2,4], [2,3,5])) // 도난 당하고 여벌 있는 학생 주의
+// console.log(solution(5, [2,4], [2,4])) 
+// console.log(solution(5, [1,4], [2,3]))  // 양방향(앞사람, 뒷사람) 체크 해야함
+// console.log(solution(5, [4,2], [3,5]))  // 빌리는 순서 주의 ** 
