@@ -1,24 +1,21 @@
 function solution(players, callings) {
-    const keyPlayers = {}
-    const keyRanks = {}
-    players.forEach((player,idx)=>{
-        const rank = idx+1
-        keyPlayers[player] = rank
-        keyRanks[rank] = player
-    })
+    const playersMap = new Map();
+    const playersRankMap = new Map();
 
-    callings.forEach((calling)=>{
-        const callingPlayerRank = keyPlayers[calling];
-        const frontPlayer = keyRanks[callingPlayerRank - 1]
-        const frontPlayerRank = keyPlayers[frontPlayer];
-        
-        keyRanks[frontPlayerRank] = calling
-        keyRanks[callingPlayerRank] = frontPlayer        
-        
-        keyPlayers[frontPlayer] += 1
-        keyPlayers[calling] -= 1
-    })
+    players.forEach((value, index) => {
+        playersMap.set(value, index);
+        playersRankMap.set(index, value);
+    });
 
+    callings.forEach((value) => {
+        const currentPlayerRank = playersMap.get(value);
+        const frontPlayerName = playersRankMap.get(currentPlayerRank - 1);
 
-    return Object.values(keyRanks)
+        playersMap.set(value, currentPlayerRank - 1);
+        playersRankMap.set(currentPlayerRank - 1, value);
+        playersMap.set(frontPlayerName, currentPlayerRank);
+        playersRankMap.set(currentPlayerRank, frontPlayerName);
+    });
+
+    return [...playersRankMap.values()];
 }
