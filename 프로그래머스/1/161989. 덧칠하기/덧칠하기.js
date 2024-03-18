@@ -1,11 +1,11 @@
 function solution(n, m, section) {
-    let paint = section[0];
-    let cnt = 1;
-    for(let s of section) {
-        if(s - paint >= m) {
-            cnt +=1;
-            paint = s;
+    var answer = 0;
+    var painted = 0;
+    for(var s of section) {
+        if(painted < s) {
+            answer++;
+            painted = s+m-1;
         }
     }
-    return cnt
+    return answer
 }
