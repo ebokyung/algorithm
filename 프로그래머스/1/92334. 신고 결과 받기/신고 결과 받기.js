@@ -1,24 +1,18 @@
 function solution(id_list, report, k) {
-    var answer = [];
-    const statistic = {}
-    id_list.forEach(userId => {
-        statistic[userId] = { reported: [], suspendCnt: 0 }
-    })
+    let reports = [...new Set(report)].map(a=>{return a.split(' ')});
     
-    report.forEach(r => {
-        const [from, to] = r.split(' ');
-        if(!statistic[to]['reported'].includes(from))
-            statistic[to]['reported'].push(from);
-    })
-    
-    id_list.forEach(userId => {
-        if(statistic[userId]['reported'].length >= k){
-            statistic[userId]['reported'].forEach(id => {
-                statistic[id]['suspendCnt'] += 1
-            })
+    let reportedCnt = new Map();
+    for (const [from, to] of reports){
+        reportedCnt.set(to, reportedCnt.get(to) + 1 || 1)
+    }
+
+    let suspendCnt = new Map();
+    for(const [from, to] of reports){
+        if(reportedCnt.get(to) >= k){
+            suspendCnt.set(from, suspendCnt.get(from) + 1 || 1)
         }
-    })
-    
-    id_list.forEach(userId => answer.push(statistic[userId]['suspendCnt']))
+    }
+
+    let answer = id_list.map(id => suspendCnt.get(id) || 0)
     return answer;
 }
