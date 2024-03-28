@@ -1,16 +1,16 @@
 function solution(k, score) {
-    var answer = [];
-    const hallOfFame = []
-
-    score.forEach(s => {
-        hallOfFame.push(s);
-        if(hallOfFame.length <= k){
-            hallOfFame.sort((a,b) => b-a)
-            answer.push(hallOfFame[hallOfFame.length - 1])
-        }else {
-            hallOfFame.sort((a,b) => b-a).splice(k)
-            answer.push(hallOfFame[k-1])
+    const stack = []
+    return score.reduce((a,c) => {
+        if(stack.length < k) {
+            stack.push(c)
+            stack.sort((a,b) => a - b)
         }
-    })
-    return answer;
+        else {
+            stack.push(c)
+            stack.sort((a,b) => a - b)
+            stack.shift()
+        }
+        a.push(stack[0])
+        return a
+    },[])
 }
