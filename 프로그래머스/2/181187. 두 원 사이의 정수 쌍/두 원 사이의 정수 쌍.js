@@ -1,15 +1,9 @@
 const solution = (r1, r2) => {
     let answer = 0;
-    for (let i = 1; i <= r2; i++) {
-        if(i < r1){
-            const y2 = Math.sqrt(Math.pow(r2, 2) - Math.pow(i, 2));
-            const y1 = Math.sqrt(Math.pow(r1, 2) - Math.pow(i, 2));
-            answer += Math.floor(y2) - Math.ceil(y1) + 1;
-        }
-        else{
-            const y2 = Math.sqrt(Math.pow(r2, 2) - Math.pow(i, 2));
-            answer += Math.floor(y2) + 1
-        }
+    for(let i=1; i<=r2; i++){
+        const y2 = Math.sqrt(r2**2 - i**2)
+        const y1 = Math.sqrt(r1**2 - i**2) || 0
+        answer += Math.floor(y2) - Math.ceil(y1) + 1
     }
     answer *= 4;
     return answer;
