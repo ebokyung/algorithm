@@ -1,22 +1,21 @@
 const solution = (sequence, k) => {
-  let answer = [];
-  let maxSum = 0;
-  let end = 0;
-
-  const n = sequence.length;
-  for (let i = 0; i < n; i++) {
-    while (maxSum < k && end < n) {
-      maxSum += sequence[end];
-      end++;
+    const answer = [];
+    let sum = 0;
+    let left = 0;
+    let right = 0;
+    while(right <= sequence.length){
+        if(sum === k){
+          answer.push([left, right-1, right-1-left])
+          sum -= sequence[left]
+          left++
+        }else if(sum < k){
+          sum += sequence[right]
+          right++
+        }else if(sum > k){
+          sum -= sequence[left]
+          left++
+        }
     }
-
-    if (maxSum === k) {
-      answer.push([i, end - 1, end - 1 - i]);
-    }
-
-    maxSum -= sequence[i];
-  }
-
-  answer.sort((a, b) => a[2] - b[2]);
-  return answer[0] ? answer[0].slice(0, 2) : [];
+    answer.sort((a,b) => a[2]-b[2])
+    return answer[0].slice(0,2)
 };
