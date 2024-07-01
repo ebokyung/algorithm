@@ -16,20 +16,40 @@ const readline = require('readline');
 	process.exit();
 })();
 
-function solution (N, M, houses, rainySeasons) {
-	let rained = new Set()
+
+function solution(N, M, houses, rainySeason){
+	let rainedHouses = new Set();
 	for(let i=0; i<M; i++){
-		const [s,e] = rainySeasons[i];
-		for(let j=s-1; j<e; j++){
-			houses[j]++;
-			rained.add(j)
+		const [s,e] = rainySeason[i];
+		for(let j=s; j<=e; j++){
+			houses[j-1] += 1;
+			rainedHouses.add(j-1)
 		}
 		if((i+1) % 3 === 0){
-			for(let houseIdx of rained){
-				houses[houseIdx]--;
+			for(let houseIdx of rainedHouses.values()){
+				houses[houseIdx] -= 1;
 			}
-			rained.clear()
+			rainedHouses.clear()
 		}
 	}
-	console.log(houses.join(' '))
+	return console.log(houses.join(' '));
 }
+
+
+// function solution (N, M, houses, rainySeasons) {
+// 	let rained = new Set()
+// 	for(let i=0; i<M; i++){
+// 		const [s,e] = rainySeasons[i];
+// 		for(let j=s-1; j<e; j++){
+// 			houses[j]++;
+// 			rained.add(j)
+// 		}
+// 		if((i+1) % 3 === 0){
+// 			for(let houseIdx of rained){
+// 				houses[houseIdx]--;
+// 			}
+// 			rained.clear()
+// 		}
+// 	}
+// 	console.log(houses.join(' '))
+// }
