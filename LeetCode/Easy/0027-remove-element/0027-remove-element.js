@@ -3,33 +3,39 @@
  * @param {number} val
  * @return {number}
  */
-// var removeElement = function(nums, val) {
-//     let k = 0;  // 유효한 요소를 저장할 위치를 가리키는 포인터
 
-//     for (let i = 0; i < nums.length; i++) {
-//         if (nums[i] !== val) {
-//             nums[k] = nums[i];
-//             k++;
-//         }
-//     }
+// 3 2 2 3
+// p1
+//       p2
+// 1. p1 제거 대상이니까 p2 할당
+//    p2 왼쪽으로 이동
 
-//     return k;
-// };
+// 3 2 2 3
+// p1
+//     p2
+// 2. p1 제거 대상이니까 p2 할당, p2 왼쪽으로 이동
 
-// 공간 복잡도 O(1)
-// 시간 복잡도 O(n)
+// 2 2 2 3
+// p1
+//   p2
+// 3. p1 제거 대상 아니므로 p1 오른쪽으로 이동
 
-var removeElement = function(nums, val) {
-    let p1 = 0;
-    let p2 = nums.length - 1
+// 2 2 2 3
+//   p1
+//   p2
+// 4. p1, p2 인덱스가 동일해서 종료
 
-    while(p1 <= p2){
-        if(nums[p1] === val){
-            nums[p1] = nums[p2]
-            p2--;
-        }else {
-            p1++;
+const removeElement = (nums, val) => {
+    let p1 = 0, p2 = nums.length - 1
+
+    while(p1 <= p2) {
+        if(nums[p1] === val) {
+            nums[p1] = nums[p2--]
+        } else {
+            p1++
         }
+        console.log(nums)
     }
+
     return p1
 }
