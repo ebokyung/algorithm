@@ -50,7 +50,6 @@ var solve = function(board) {
             seen.add(`${r},${c}`)
             if(board[r][c] === 'O') {
                 const region = bfs([r,c])
-                console.log(region)
                 if(region.length > 0) replaceBoard(region)
             }
         }
